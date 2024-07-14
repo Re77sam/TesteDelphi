@@ -1,0 +1,30 @@
+unit ContaBancariaController;
+
+interface
+
+uses
+  ContaBancariaModel, DAO;
+
+type
+  TContaBancariaController = class
+  private
+    FDAO: TDAO;
+  public
+    constructor Create(ADAO: TDAO);
+    function SaveContaBancaria(Conta: TContaBancaria): Boolean;
+  end;
+
+implementation
+
+constructor TContaBancariaController.Create(ADAO: TDAO);
+begin
+  FDAO := ADAO;
+end;
+
+function TContaBancariaController.SaveContaBancaria(Conta: TContaBancaria): Boolean;
+begin
+  Result := FDAO.SaveContaBancaria(Conta);
+end;
+
+end.
+

@@ -1,0 +1,70 @@
+unit ControllerAgencia;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient, ModelAgencia;
+
+type
+  TControllerAgencia = class
+  private
+    FDataSet: TClientDataSet;
+  public
+    constructor Create(DataSet: TClientDataSet);
+    procedure AdicionarAgencia(Agencia: TAgencia);
+    procedure EditarAgencia(Agencia: TAgencia);
+    procedure ExcluirAgencia(CodigoAgencia: string);
+    procedure ConsultarAgencias;
+  end;
+
+implementation
+
+constructor TControllerAgencia.Create(DataSet: TClientDataSet);
+begin
+  FDataSet := DataSet;
+end;
+
+procedure TControllerAgencia.AdicionarAgencia(Agencia: TAgencia);
+begin
+  FDataSet.Append;
+  FDataSet.FieldByName('CodigoAgencia').AsString := Agencia.CodigoAgencia;
+  FDataSet.FieldByName('NumeroAgencia').AsString := Agencia.NumeroAgencia;
+  FDataSet.FieldByName('NomeAgencia').AsString := Agencia.NomeAgencia;
+  FDataSet.FieldByName('NomeCidade').AsString := Agencia.NomeCidade;
+  FDataSet.FieldByName('Estado').AsString := Agencia.Estado;
+  FDataSet.FieldByName('DataAbertura').AsDateTime := Agencia.DataAbertura;
+  FDataSet.FieldByName('GerenteResponsavel').AsString := Agencia.GerenteResponsavel;
+  FDataSet.Post;
+end;
+
+procedure TControllerAgencia.EditarAgencia(Agencia: TAgencia);
+begin
+  if FDataSet.Locate('CodigoAgencia', Agencia.CodigoAgencia, []) then
+  begin
+    FDataSet.Edit;
+    FDataSet.FieldByName('NumeroAgencia').AsString := Agencia.NumeroAgencia;
+    FDataSet.FieldByName('NomeAgencia').AsString := Agencia.NomeAgencia;
+    FDataSet.FieldByName('NomeCidade').AsString := Agencia.NomeCidade;
+    FDataSet.FieldByName('Estado').AsString := Agencia.Estado;
+    FDataSet.FieldByName('DataAbertura').AsDateTime := Agencia.DataAbertura;
+    FDataSet.FieldByName('GerenteResponsavel').AsString := Agencia.GerenteResponsavel;
+    FDataSet.Post;
+  end;
+end;
+
+procedure TControllerAgencia.ExcluirAgencia(CodigoAgencia: string);
+begin
+  if FDataSet.Locate('CodigoAgencia', CodigoAgencia, []) then
+    FDataSet.Delete;
+end;
+
+procedure TControllerAgencia.ConsultarAgencias;
+begin
+  // Implementar lógica de consulta no banco de dados
+  FDataSet.EmptyDataSet;
+  FDataSet.AppendRecord(['001', '001', 'Agência Centro', 'São Paulo', 'SP', Now, 'João Silva']);
+  FDataSet.AppendRecord(['002', '002', 'Agência Norte', 'Rio de Janeiro', 'RJ', Now, 'Maria Souza']);
+end;
+
+end.
+

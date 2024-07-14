@@ -1,0 +1,70 @@
+unit ControllerConta;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient, ModelConta;
+
+type
+  TControllerConta = class
+  private
+    FDataSet: TClientDataSet;
+  public
+    constructor Create(DataSet: TClientDataSet);
+    procedure AdicionarConta(Conta: TConta);
+    procedure EditarConta(Conta: TConta);
+    procedure ExcluirConta(CodigoConta: string);
+    procedure ConsultarContas;
+  end;
+
+implementation
+
+constructor TControllerConta.Create(DataSet: TClientDataSet);
+begin
+  FDataSet := DataSet;
+end;
+
+procedure TControllerConta.AdicionarConta(Conta: TConta);
+begin
+  FDataSet.Append;
+  FDataSet.FieldByName('CodigoConta').AsString := Conta.CodigoConta;
+  FDataSet.FieldByName('NumeroConta').AsString := Conta.NumeroConta;
+  FDataSet.FieldByName('DigitoConta').AsString := Conta.DigitoConta;
+  FDataSet.FieldByName('CodigoAgencia').AsString := Conta.CodigoAgencia;
+  FDataSet.FieldByName('NumeroAgencia').AsString := Conta.NumeroAgencia;
+  FDataSet.FieldByName('TitularConta').AsString := Conta.TitularConta;
+  FDataSet.FieldByName('GerenteConta').AsString := Conta.GerenteConta;
+  FDataSet.Post;
+end;
+
+procedure TControllerConta.EditarConta(Conta: TConta);
+begin
+  if FDataSet.Locate('CodigoConta', Conta.CodigoConta, []) then
+  begin
+    FDataSet.Edit;
+    FDataSet.FieldByName('NumeroConta').AsString := Conta.NumeroConta;
+    FDataSet.FieldByName('DigitoConta').AsString := Conta.DigitoConta;
+    FDataSet.FieldByName('CodigoAgencia').AsString := Conta.CodigoAgencia;
+    FDataSet.FieldByName('NumeroAgencia').AsString := Conta.NumeroAgencia;
+    FDataSet.FieldByName('TitularConta').AsString := Conta.TitularConta;
+    FDataSet.FieldByName('GerenteConta').AsString := Conta.GerenteConta;
+    FDataSet.Post;
+  end;
+end;
+
+procedure TControllerConta.ExcluirConta(CodigoConta: string);
+begin
+  if FDataSet.Locate('CodigoConta', CodigoConta, []) then
+    FDataSet.Delete;
+end;
+
+procedure TControllerConta.ConsultarContas;
+begin
+  // Implementar lógica de consulta no banco de dados
+  FDataSet.EmptyDataSet;
+  FDataSet.AppendRecord(['001', '12345', '6', '001', '001', 'João Silva', 'Maria Souza']);
+  FDataSet.AppendRecord(['002', '67890', '1', '002', '002', 'Carlos Lima', 'Ana Santos']);
+end;
+
+end.
+

@@ -1,0 +1,65 @@
+unit DAO;
+
+interface
+
+uses
+  System.SysUtils, FireDAC.Comp.Client, Data.DB, ModelAgencia, ModelConta;
+
+type
+  TDAO = class
+  private
+    FConnection: TFDConnection;
+  public
+    constructor Create(AConnection: TFDConnection);
+    function SaveAgencia(Agencia: TAgencia): Boolean;
+    function SaveContaBancaria(Conta: TContaBancaria): Boolean;
+  end;
+
+implementation
+
+constructor TDAO.Create(AConnection: TFDConnection);
+begin
+  FConnection := AConnection;
+end;
+
+function TDAO.SaveAgencia(Agencia: TAgencia): Boolean;
+var
+  Query: TFDQuery;
+begin
+  Result := False;
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Connection := FConnection;
+    Query.SQL.Text := 'INSERT INTO Agencias (Nome, Endereco, Codigo) VALUES (:Nome, :Endereco, :Codigo)';
+    Query.ParamByName('Nome').AsString := Agencia.Nome;
+    Query.ParamByName('Endereco').AsString := Agencia.Endereco;
+    Query.ParamByName('Codigo').AsString := Agencia.Codigo;
+    Query.ExecSQL;
+    Result := True;
+  finally
+    Query.Free;
+  end;
+end;
+
+function TDAO.SaveContaBancaria(Conta: TContaBancaria): Boolean;
+var
+  Query: TFDQuery;
+begin
+  Result := False;
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Connection := FConnection;
+    Query.SQL.Text := 'INSERT INTO ContasBancarias (Numero, Tipo, Saldo, DataAbertura) VALUES (:Numero, :Tipo, :Saldo, :DataAbertura)';
+    Query.ParamByName('Numero').AsString := Conta.Numero;
+    Query.ParamByName('Tipo').AsString := Conta.Tipo;
+    Query.ParamByName('Saldo').AsFloat := Conta.Saldo;
+    Query.ParamByName('DataAbertura').AsDateTime := Conta.DataAbertura;
+    Query.ExecSQL;
+    Result := True;
+  finally
+    Query.Free;
+  end;
+end;
+
+end.
+

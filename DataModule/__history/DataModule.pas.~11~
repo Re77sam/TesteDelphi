@@ -1,0 +1,62 @@
+unit DataModule;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error,
+  FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.UI.Intf,
+  FireDAC.VCLUI.Wait, FireDAC.Phys.ODBCBase;
+
+type
+  TdmMain = class(TDataModule)
+    FDConnection: TFDConnection;
+    FDQuery: TFDQuery;
+    FDPhysMSSQLDriverLink: TFDPhysMSSQLDriverLink;
+    cdsAgencias: TClientDataSet;
+    cdsContas: TClientDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    procedure ConfigurarConexao;
+  public
+    { Public declarations }
+  end;
+
+var
+  dmMain: TdmMain;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TdmMain.DataModuleCreate(Sender: TObject);
+begin
+  ConfigurarConexao;
+  cdsAgencias.CreateDataSet;
+  cdsContas.CreateDataSet;
+end;
+
+procedure TdmMain.ConfigurarConexao;
+var
+  ServerName: string;
+begin
+  // Detectar o ambiente e definir o ServerName apropriado
+  {$IFDEF DEBUG}
+  ServerName := 'localhost\SQLEXPRESS';
+  {$ELSE}
+  ServerName := 'production_server_name';
+  {$ENDIF}
+
+  FDConnection.Params.Clear;
+  FDConnection.Params.Add('DriverID=MSSQL');
+  FDConnection.Params.Add('Server=' + ServerName);
+  FDConnection.Params.Add('Database=BancoSistema');
+  FDConnection.Params.Add('Integrated Security=SSPI');
+  FDConnection.LoginPrompt := False;
+  FDConnection.Connected := True;
+end;
+
+end.
+

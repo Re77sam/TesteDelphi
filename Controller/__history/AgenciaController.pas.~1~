@@ -1,0 +1,30 @@
+unit AgenciaController;
+
+interface
+
+uses
+  AgenciaModel, DAO;
+
+type
+  TAgenciaController = class
+  private
+    FDAO: TDAO;
+  public
+    constructor Create(ADAO: TDAO);
+    function SaveAgencia(Agencia: TAgencia): Boolean;
+  end;
+
+implementation
+
+constructor TAgenciaController.Create(ADAO: TDAO);
+begin
+  FDAO := ADAO;
+end;
+
+function TAgenciaController.SaveAgencia(Agencia: TAgencia): Boolean;
+begin
+  Result := FDAO.SaveAgencia(Agencia);
+end;
+
+end.
+

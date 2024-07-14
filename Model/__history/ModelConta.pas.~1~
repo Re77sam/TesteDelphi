@@ -1,0 +1,22 @@
+unit ContaBancariaModel;
+
+interface
+
+type
+  TContaBancaria = class
+  private
+    FNumero: string;
+    FTipo: string;
+    FSaldo: Double;
+    FDataAbertura: TDateTime;
+  public
+    property Numero: string read FNumero write FNumero;
+    property Tipo: string read FTipo write FTipo;
+    property Saldo: Double read FSaldo write FSaldo;
+    property DataAbertura: TDateTime read FDataAbertura write FDataAbertura;
+  end;
+
+implementation
+
+end.
+

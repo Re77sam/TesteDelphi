@@ -1,0 +1,20 @@
+unit AgenciaModel;
+
+interface
+
+type
+  TAgencia = class
+  private
+    FNome: string;
+    FEndereco: string;
+    FCodigo: string;
+  public
+    property Nome: string read FNome write FNome;
+    property Endereco: string read FEndereco write FEndereco;
+    property Codigo: string read FCodigo write FCodigo;
+  end;
+
+implementation
+
+end.
+
