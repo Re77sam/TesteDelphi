@@ -1,10 +1,8 @@
 unit ControllerAgencia;
 
 interface
-
 uses
   System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient, ModelAgencia, FireDAC.Comp.Client;
-
 type
   TControllerAgencia = class
   private
@@ -17,15 +15,12 @@ type
     procedure ExcluirAgencia(CodigoAgencia: string);
     procedure ConsultarAgencias;
   end;
-
 implementation
-
 constructor TControllerAgencia.Create(DataSet: TClientDataSet; FDQuery: TFDQuery);
 begin
   FDataSet := DataSet;
   FFDQuery := FDQuery;
 end;
-
 procedure TControllerAgencia.AdicionarAgencia(Agencia: TAgencia);
 begin
   FDataSet.Append;
@@ -38,7 +33,6 @@ begin
   FDataSet.FieldByName('GerenteResponsavel').AsString := Agencia.GerenteResponsavel;
   FDataSet.Post;
 end;
-
 procedure TControllerAgencia.EditarAgencia(Agencia: TAgencia);
 begin
   if FDataSet.Locate('CodigoAgencia', Agencia.CodigoAgencia, []) then
@@ -53,18 +47,15 @@ begin
     FDataSet.Post;
   end;
 end;
-
 procedure TControllerAgencia.ExcluirAgencia(CodigoAgencia: string);
 begin
   if FDataSet.Locate('CodigoAgencia', CodigoAgencia, []) then
     FDataSet.Delete;
 end;
-
 procedure TControllerAgencia.ConsultarAgencias;
 begin
   FFDQuery.SQL.Text := 'SELECT CodigoAgencia, NumeroAgencia, NomeAgencia, NomeCidade, Estado, DataAbertura, GerenteResponsavel FROM Agencia';
   FFDQuery.Open;
-
   FDataSet.EmptyDataSet;
   while not FFDQuery.Eof do
   begin
@@ -77,12 +68,9 @@ begin
     FDataSet.FieldByName('DataAbertura').AsDateTime := FFDQuery.FieldByName('DataAbertura').AsDateTime;
     FDataSet.FieldByName('GerenteResponsavel').AsString := FFDQuery.FieldByName('GerenteResponsavel').AsString;
     FDataSet.Post;
-
     FFDQuery.Next;
   end;
-
   FFDQuery.Close;
 end;
-
 end.
 

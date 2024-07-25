@@ -1,10 +1,8 @@
 unit ControllerConta;
 
 interface
-
 uses
   System.SysUtils, System.Classes, Data.DB, Datasnap.DBClient, ModelConta, FireDAC.Comp.Client;
-
 type
   TControllerConta = class
   private
@@ -17,15 +15,12 @@ type
     procedure ExcluirConta(CodigoConta: string);
     procedure ConsultarContas;
   end;
-
 implementation
-
 constructor TControllerConta.Create(DataSet: TClientDataSet; FDQuery: TFDQuery);
 begin
   FDataSet := DataSet;
   FFDQuery := FDQuery;
 end;
-
 procedure TControllerConta.AdicionarConta(Conta: TConta);
 begin
   FDataSet.Append;
@@ -38,7 +33,6 @@ begin
   FDataSet.FieldByName('GerenteConta').AsString := Conta.GerenteConta;
   FDataSet.Post;
 end;
-
 procedure TControllerConta.EditarConta(Conta: TConta);
 begin
   if FDataSet.Locate('CodigoConta', Conta.CodigoConta, []) then
@@ -53,18 +47,15 @@ begin
     FDataSet.Post;
   end;
 end;
-
 procedure TControllerConta.ExcluirConta(CodigoConta: string);
 begin
   if FDataSet.Locate('CodigoConta', CodigoConta, []) then
     FDataSet.Delete;
 end;
-
 procedure TControllerConta.ConsultarContas;
 begin
   FFDQuery.SQL.Text := 'SELECT CodigoConta, NumeroConta, DigitoConta, CodigoAgencia, NumeroAgencia, TitularConta, GerenteConta FROM Conta';
   FFDQuery.Open;
-
   FDataSet.EmptyDataSet;
   while not FFDQuery.Eof do
   begin
@@ -77,12 +68,9 @@ begin
     FDataSet.FieldByName('TitularConta').AsString := FFDQuery.FieldByName('TitularConta').AsString;
     FDataSet.FieldByName('GerenteConta').AsString := FFDQuery.FieldByName('GerenteConta').AsString;
     FDataSet.Post;
-
     FFDQuery.Next;
   end;
-
   FFDQuery.Close;
 end;
-
 end.
 
